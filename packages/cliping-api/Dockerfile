@@ -1,7 +1,6 @@
 FROM node:18-alpine
 COPY . .
-RUN npm i -g pnpm
-RUN pnpm i
-RUN pnpm build
+RUN npm i
+RUN npm run build
 EXPOSE 8080
-ENTRYPOINT ["pnpm", "start"]
+ENTRYPOINT ["node", "dist/main"]

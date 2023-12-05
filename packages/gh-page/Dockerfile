@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:18-alpine
 COPY . .
 RUN npm i
 RUN npm run build
