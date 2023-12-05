@@ -42,7 +42,7 @@ module.exports = {
       name: 'ci:\t\t배포 관련 구성파일 변경 사항',
     },
   ],
-  scopes: [''],
+  scopes: ['cliping-api', 'gh-page'],
   allowCustomScopes: true,
   subjectLimit: 255,
   allowBreakingChanges: ['feat', 'fix', 'refactor', 'chore', 'perf', 'revert', 'build'],

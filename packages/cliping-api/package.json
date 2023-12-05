@@ -1,5 +1,5 @@
 {
-  "name": "cliping-server-nestjs",
+  "name": "cliping-api",
   "version": "0.1.1",
   "description": "",
   "author": "",
@@ -20,23 +20,21 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@apollo/server": "^4.9.4",
-    "@faker-js/faker": "^8.2.0",
-    "@nestjs/apollo": "^12.0.9",
+    "@apollo/server": "^4.9.5",
+    "@nestjs/apollo": "^12.0.11",
     "@nestjs/axios": "^3.0.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
-    "@nestjs/graphql": "^12.0.9",
-    "@nestjs/jwt": "^10.1.1",
+    "@nestjs/graphql": "^12.0.11",
     "@nestjs/platform-express": "^10.0.0",
-    "@nestjs/typeorm": "^10.0.0",
+    "@nestjs/typeorm": "^10.0.1",
     "axios": "^1.6.0",
     "dayjs": "^1.11.10",
-    "firebase-admin": "^11.11.0",
+    "firebase-admin": "^11.11.1",
     "graphql": "^16.8.1",
     "lodash": "^4.17.21",
-    "mysql2": "^3.6.3",
+    "mysql2": "^3.6.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.17"
@@ -82,5 +80,11 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "lint-staged": {
+    "!(*test).{ts,tsx}": [
+      "eslint --fix . --ext .tsx,.ts",
+      "prettier --write \"**/*.+(js|jsx|ts|tsx)\""
+    ]
   }
 }
