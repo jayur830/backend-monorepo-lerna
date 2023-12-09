@@ -7,7 +7,10 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin', 'simple-import-sort'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
   root: true,
   env: {
     node: true,
@@ -31,7 +34,15 @@ module.exports = {
           // Side effect imports.
           ['^\\u0000'],
           // Other relative imports. Put same-folder imports and `.` last.
-          ['^\\../../../../../..', '^\\../../../../..', '^\\../../../..', '^\\../../..', '^\\../..', '^\\..', '^\\.'],
+          [
+            '^\\../../../../../..',
+            '^\\../../../../..',
+            '^\\../../../..',
+            '^\\../../..',
+            '^\\../..',
+            '^\\..',
+            '^\\.',
+          ],
         ],
       },
     ],
