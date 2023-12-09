@@ -1,0 +1,18 @@
+{
+  "name": "@toy/decorator",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "author": "jayur830 <jayur830@naver.com>",
+  "license": "ISC",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/graphql": "^12.0.11",
+    "typescript": "^5.1.3"
+  }
+}
