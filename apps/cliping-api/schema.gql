@@ -1,0 +1,391 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""리뷰 정보"""
+type ReviewPayload {
+  """리뷰 ID (PK)"""
+  id: Int!
+
+  """리뷰 제목"""
+  title: String!
+
+  """리뷰 내용"""
+  content: String!
+
+  """첨부 이미지"""
+  imageUrl: String
+
+  """평점"""
+  rating: Int!
+
+  """인스타그램 업로드 URL"""
+  instagramPostUrl: String
+
+  """리뷰 장소"""
+  placeId: String!
+}
+
+"""리뷰 작성 유저"""
+type ReviewUser {
+  """유저 ID (PK)"""
+  id: String!
+
+  """프로필 사진 URL"""
+  profileImageUrl: String
+}
+
+"""리뷰 상세 정보"""
+type Review {
+  """리뷰 ID (PK)"""
+  id: Int!
+
+  """장소 ID"""
+  placeId: String!
+
+  """리뷰 작성 유저"""
+  user: ReviewUser!
+
+  """리뷰 제목"""
+  title: String!
+
+  """리뷰 내용"""
+  content: String
+
+  """첨부 이미지"""
+  imageUrl: String
+
+  """좋아요 수"""
+  like: Int!
+
+  """평점"""
+  rating: Int!
+
+  """인스타그램 업로드 URL"""
+  instagramPostUrl: String
+
+  """리뷰 생성일자"""
+  createdAt: String!
+
+  """리뷰 수정일자"""
+  updatedAt: String!
+}
+
+"""리뷰 데이터 Pagination"""
+type ReviewPagination {
+  """limit"""
+  limit: Int!
+
+  """offset"""
+  offset: Int!
+
+  """전체 데이터 개수"""
+  total: Int!
+
+  """리뷰 목록"""
+  list: [Review!]!
+}
+
+"""프로필 상세"""
+type Profile {
+  """소개"""
+  description: String
+
+  """프로필 부제목"""
+  subTitle: String
+
+  """커버 사진 URL"""
+  backgroundImageUrl: String
+
+  """프로필 사진 URL"""
+  profileImageUrl: String
+
+  """인스타그램 URL"""
+  instagramUrl: String
+}
+
+"""프로필 상세 정보"""
+type UpdateProfilePayload {
+  """소개"""
+  description: String
+
+  """프로필 부제목"""
+  subTitle: String
+
+  """커버 사진 URL"""
+  backgroundImageUrl: String
+
+  """프로필 사진 URL"""
+  profileImageUrl: String
+
+  """인스타그램 URL"""
+  instagramUrl: String
+
+  """유저 ID (PK)"""
+  id: String!
+
+  """닉네임"""
+  nickName: String!
+}
+
+"""유저 상세 정보"""
+type User {
+  """유저 ID (PK)"""
+  id: String!
+
+  """닉네임"""
+  nickName: String
+
+  """생성일자"""
+  createdAt: String!
+
+  """프로필 상세"""
+  profile: Profile!
+
+  """팔로워 수"""
+  followerCount: Int!
+
+  """팔로잉 수"""
+  followingCount: Int!
+
+  """작성한 리뷰 수"""
+  reviewCount: Int!
+}
+
+"""팔로워 유저 또는 팔로잉 유저"""
+type Follow {
+  """유저 ID (PK)"""
+  id: String!
+
+  """닉네임"""
+  nickName: String!
+
+  """프로필 사진 URL"""
+  profileImageUrl: String
+}
+
+"""팔로잉/팔로워 데이터 Pagination"""
+type FollowPagination {
+  """limit"""
+  limit: Int!
+
+  """offset"""
+  offset: Int!
+
+  """전체 데이터 개수"""
+  total: Int!
+
+  """팔로잉/팔로워 목록"""
+  list: [Follow!]!
+}
+
+"""로그인한 유저의 개인 정보"""
+type Me {
+  """이름"""
+  name: String!
+
+  """이메일"""
+  email: String!
+
+  """유저 ID (PK)"""
+  userId: String!
+
+  """OAuth 인증 목록"""
+  providers: [String!]!
+}
+
+type Query {
+  """장소에 대한 좋아요 수"""
+  placeLikeCount(
+    """장소 ID"""
+    placeId: String!
+  ): Int!
+
+  """리뷰 목록 조회"""
+  reviewList(
+    """limit"""
+    limit: Int = 10
+
+    """offset"""
+    offset: Int = 0
+
+    """검색 필터 (placeId: 장소 ID, keyword: 검색어)"""
+    filter: ReviewFilter = {placeId: null, keyword: null}
+  ): ReviewPagination!
+
+  """
+  리뷰 조회
+  
+  - throw
+  ```json
+  // ID에 대한 리뷰가 없을 경우
+  {
+    "message": "해당 ID의 리뷰가 존재하지 않습니다.",
+    "extensions": {
+      "code": "REVIEW_NOT_EXISTS"
+    }
+  }
+  ```
+  """
+  review(
+    """리뷰 ID (PK)"""
+    id: Int!
+  ): Review!
+
+  """로그인한 유저의 개인 정보"""
+  me: Me!
+
+  """
+  유저 상세 정보
+  
+  - throw
+  ```json
+  // ID에 대한 유저가 없을 경우
+  {
+    "message": "해당하는 유저가 없습니다.",
+    "extensions": {
+      "code": "USER_NOT_EXISTS"
+    }
+  }
+  ```
+  """
+  user(id: String!): User!
+
+  """팔로워 목록"""
+  followerList(limit: Int = 10, offset: Int = 0): FollowPagination!
+
+  """팔로잉 목록"""
+  followingList(limit: Int = 10, offset: Int = 0): FollowPagination!
+}
+
+"""리뷰 검색 필터"""
+input ReviewFilter {
+  """장소 ID (PK)"""
+  placeId: String
+
+  """검색어"""
+  keyword: String
+}
+
+type Mutation {
+  """장소 좋아요 누르기"""
+  Place_like(placeId: String!): Int!
+
+  """리뷰 등록"""
+  Review_create(input: CreateReviewInput!): ReviewPayload!
+
+  """
+  리뷰 수정
+  
+  - throw
+  ```json
+  // ID에 대한 리뷰가 없을 경우
+  {
+    "message": "해당 ID의 리뷰가 존재하지 않습니다.",
+    "extensions": {
+      "code": "REVIEW_NOT_EXISTS"
+    }
+  }
+  ```
+  """
+  Review_update(input: UpdateReviewInput!): ReviewPayload!
+
+  """
+  리뷰 좋아요 누르기
+  
+  - return: `number` 해당 리뷰의 좋아요 총 개수
+  - throw
+  ```json
+  // ID에 대한 리뷰가 없을 경우
+  {
+    "message": "해당 ID의 리뷰가 존재하지 않습니다.",
+    "extensions": {
+      "code": "REVIEW_NOT_EXISTS"
+    }
+  }
+  ```
+  """
+  Review_like(
+    """리뷰 ID (PK)"""
+    reviewId: Int!
+  ): Int!
+
+  """다른 유저 팔로우"""
+  User_follow(
+    """유저 ID (PK)"""
+    id: String!
+
+    """
+    true: 팔로우, false: 언팔
+    
+    - throw
+    ```json
+    // ID에 대한 유저가 없을 경우
+    {
+      "message": "해당하는 유저가 없습니다.",
+      "extensions": {
+        "code": "USER_NOT_EXISTS"
+      }
+    }
+    ```
+    """
+    follow: Boolean!
+  ): User!
+
+  """프로필 상세 정보 수정"""
+  Profile_update(input: UpdateProfileInput!): UpdateProfilePayload!
+}
+
+"""리뷰 정보 입력"""
+input CreateReviewInput {
+  """리뷰 제목"""
+  title: String!
+
+  """리뷰 내용"""
+  content: String!
+
+  """첨부 이미지"""
+  imageUrl: String
+
+  """평점"""
+  rating: Int = 0
+
+  """인스타그램 업로드 URL"""
+  instagramPostUrl: String
+
+  """리뷰 장소"""
+  placeId: String!
+}
+
+"""리뷰 정보 수정"""
+input UpdateReviewInput {
+  """리뷰 ID (PK)"""
+  id: Int!
+
+  """리뷰 제목"""
+  title: String
+
+  """리뷰 내용"""
+  content: String
+
+  """첨부 이미지"""
+  imageUrl: String
+
+  """평점"""
+  rating: Int = 0
+
+  """인스타그램 업로드 URL"""
+  instagramPostUrl: String
+
+  """리뷰 장소"""
+  placeId: String!
+}
+
+"""프로필 상세 정보 입력"""
+input UpdateProfileInput {
+  """유저 ID (PK)"""
+  id: String!
+
+  """닉네임"""
+  nickName: String
+}
