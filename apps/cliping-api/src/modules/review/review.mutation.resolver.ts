@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
-import { UserContext } from '@toy/decorator';
+import { GqlUserContext } from '@toy/decorator';
 import type { FirebaseUser } from '@toy/firebase/types';
-import { AuthGuard } from '@toy/guard';
+import { GqlAuthGuard } from '@toy/guard';
 
 import { ReviewService } from './review.service';
 import { CreateReviewInput } from './vo/create-review-input.vo';
@@ -13,17 +13,17 @@ import { UpdateReviewInput } from './vo/update-review-input.vo';
 export class ReviewMutationResolver {
   constructor(private readonly reviewService: ReviewService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => ReviewPayload, { description: '리뷰 등록' })
   Review_create(
-    @UserContext() user: FirebaseUser,
+    @GqlUserContext() user: FirebaseUser,
     @Args({ name: 'input', type: () => CreateReviewInput })
     input: CreateReviewInput,
   ): Promise<ReviewPayload> {
     return this.reviewService.createReview(user, input);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => ReviewPayload, {
     description: `리뷰 수정
 
@@ -39,14 +39,14 @@ export class ReviewMutationResolver {
 \`\`\``,
   })
   Review_update(
-    @UserContext() user: FirebaseUser,
+    @GqlUserContext() user: FirebaseUser,
     @Args({ name: 'input', type: () => UpdateReviewInput })
     input: UpdateReviewInput,
   ): Promise<ReviewPayload> {
     return this.reviewService.updateReview(user, input);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Int, {
     description: `리뷰 좋아요 누르기
 
@@ -63,7 +63,7 @@ export class ReviewMutationResolver {
 \`\`\``,
   })
   Review_like(
-    @UserContext() user: FirebaseUser,
+    @GqlUserContext() user: FirebaseUser,
     @Args({ name: 'reviewId', type: () => Int, description: '리뷰 ID (PK)' })
     reviewId: number,
   ): Promise<number> {

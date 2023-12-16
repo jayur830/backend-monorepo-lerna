@@ -1,7 +1,7 @@
 import { InternalServerErrorException, Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { FirebaseService } from '@toy/firebase';
-import { AuthGuard, ProdGuard } from '@toy/guard';
+import { GqlAuthGuard, ProdGuard } from '@toy/guard';
 
 import { UserPayload } from '@/vo/user.payload';
 
@@ -32,13 +32,13 @@ export class AuthResolver {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => UserPayload, { description: '로그인' })
   async signIn(@Args({ name: 'email', type: () => String, description: '이메일' }) email: string) {
     return await this.authService.changeSignInStatus(email, true);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => UserPayload, { description: '로그아웃' })
   async signOut(@Args({ name: 'email', type: () => String, description: '이메일' }) email: string) {
     return await this.authService.changeSignInStatus(email, false);

@@ -10,8 +10,8 @@ export class TechResolver {
   constructor(private readonly techService: TechService) {}
 
   @Query(() => [TechLogo], { description: '모든 기술 목록 조회' })
-  techList(): Promise<TechLogo[]> {
-    return this.techService.getTechList();
+  techList(@Args({ name: 'keyword', type: () => String, nullable: true }) keyword: string | null): Promise<TechLogo[]> {
+    return this.techService.getTechList(keyword);
   }
 
   @Query(() => [Skill], { description: '기술 스택' })

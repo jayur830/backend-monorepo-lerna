@@ -1,8 +1,8 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Info, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { UserContext } from '@toy/decorator';
+import { GqlUserContext } from '@toy/decorator';
 import type { FirebaseUser } from '@toy/firebase/types';
-import { AuthGuard } from '@toy/guard';
+import { GqlAuthGuard } from '@toy/guard';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { ResumeService } from './resume.service';
@@ -25,15 +25,15 @@ export class ResumeResolver {
     return await this.resumeService.getCompanyList(info.variableValues.userId as string);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => CreateResumeInfoPayload, { description: '이력서 요약 정보 추가' })
-  Resume_create(@UserContext() user: FirebaseUser, @Args({ name: 'input', type: () => CreateResumeInfoInput }) input: CreateResumeInfoInput): Promise<CreateResumeInfoPayload> {
+  Resume_create(@GqlUserContext() user: FirebaseUser, @Args({ name: 'input', type: () => CreateResumeInfoInput }) input: CreateResumeInfoInput): Promise<CreateResumeInfoPayload> {
     return this.resumeService.createResume(user, input);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => UpdateResumeInfoPayload, { description: '이력서 요약 정보 수정' })
-  Resume_update(@UserContext() user: FirebaseUser, @Args({ name: 'input', type: () => UpdateResumeInfoInput }) input: UpdateResumeInfoInput): Promise<UpdateResumeInfoPayload> {
+  Resume_update(@GqlUserContext() user: FirebaseUser, @Args({ name: 'input', type: () => UpdateResumeInfoInput }) input: UpdateResumeInfoInput): Promise<UpdateResumeInfoPayload> {
     return this.resumeService.updateResume(user, input);
   }
 }

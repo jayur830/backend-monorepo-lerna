@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { UserContext } from '@toy/decorator';
+import { GqlUserContext } from '@toy/decorator';
 import type { FirebaseUser } from '@toy/firebase/types';
-import { AuthGuard } from '@toy/guard';
+import { GqlAuthGuard } from '@toy/guard';
 
 import { UserService } from './user.service';
 import { UpdateProfileInput } from './vo/update-profile-input.vo';
@@ -13,12 +13,12 @@ import { User } from './vo/user.vo';
 export class UserMutationResolver {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => User, {
     description: '다른 유저 팔로우',
   })
   User_follow(
-    @UserContext() user: FirebaseUser,
+    @GqlUserContext() user: FirebaseUser,
     @Args({ name: 'id', type: () => String, description: '유저 ID (PK)' })
     id: string,
     @Args({
@@ -42,12 +42,12 @@ export class UserMutationResolver {
     return this.userService.updateUserFollow(user, id, follow);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => UpdateProfilePayload, {
     description: '프로필 상세 정보 수정',
   })
   Profile_update(
-    @UserContext() user: FirebaseUser,
+    @GqlUserContext() user: FirebaseUser,
     @Args({ name: 'input', type: () => UpdateProfileInput })
     input: UpdateProfileInput,
   ): Promise<UpdateProfilePayload> {

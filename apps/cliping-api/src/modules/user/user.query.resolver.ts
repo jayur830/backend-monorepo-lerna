@@ -1,9 +1,9 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Resolver } from '@nestjs/graphql';
 import { Query } from '@nestjs/graphql';
-import { UserContext } from '@toy/decorator';
+import { GqlUserContext } from '@toy/decorator';
 import type { FirebaseUser } from '@toy/firebase/types';
-import { AuthGuard } from '@toy/guard';
+import { GqlAuthGuard } from '@toy/guard';
 
 import { UserService } from './user.service';
 import { FollowPagination } from './vo/follow-pagination.vo';
@@ -14,13 +14,13 @@ import { User } from './vo/user.vo';
 export class UserQueryResolver {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Query(() => Me, { description: '로그인한 유저의 개인 정보' })
-  me(@UserContext() user: FirebaseUser): Promise<Me> {
+  me(@GqlUserContext() user: FirebaseUser): Promise<Me> {
     return this.userService.getMe(user);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Query(() => User, {
     description: `유저 상세 정보
 
@@ -39,10 +39,10 @@ export class UserQueryResolver {
     return this.userService.getUser(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Query(() => FollowPagination, { description: '팔로워 목록' })
   followerList(
-    @UserContext() user: FirebaseUser,
+    @GqlUserContext() user: FirebaseUser,
     @Args({ name: 'limit', type: () => Int, nullable: true, defaultValue: 10 })
     limit: number,
     @Args({ name: 'offset', type: () => Int, nullable: true, defaultValue: 0 })
@@ -51,10 +51,10 @@ export class UserQueryResolver {
     return this.userService.getFollowerList(user, limit, offset);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Query(() => FollowPagination, { description: '팔로잉 목록' })
   followingList(
-    @UserContext() user: FirebaseUser,
+    @GqlUserContext() user: FirebaseUser,
     @Args({ name: 'limit', type: () => Int, nullable: true, defaultValue: 10 })
     limit: number,
     @Args({ name: 'offset', type: () => Int, nullable: true, defaultValue: 0 })

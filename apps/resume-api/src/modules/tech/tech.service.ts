@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Like, Repository } from 'typeorm';
 
 import { Tech } from '@/entities/tech.entity';
 import { TechLogo } from '@/enums/logo.enum';
@@ -17,8 +17,8 @@ export class TechService {
     @InjectRepository(Tech) private readonly techRepository: Repository<Tech>,
   ) {}
 
-  async getTechList(): Promise<TechLogo[]> {
-    const result = await this.techRepository.find({ select: ['name'] });
+  async getTechList(keyword: string | null): Promise<TechLogo[]> {
+    const result = await this.techRepository.find({ select: ['name'], where: keyword ? { name: Like(`%${keyword}%`) } : undefined });
     return result.map((item) => item.name as TechLogo);
   }
 
