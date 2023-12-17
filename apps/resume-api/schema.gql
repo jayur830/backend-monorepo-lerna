@@ -285,6 +285,9 @@ type CreateProjectPayload {
 
   """회사 ID"""
   companyId: Float!
+
+  """팀 또는 소속 서비스 이름 (없을 경우 null)"""
+  groupName: String
 }
 
 type UpdateProjectPayload {
@@ -308,6 +311,9 @@ type UpdateProjectPayload {
 
   """회사 ID"""
   companyId: Float!
+
+  """팀 또는 소속 서비스 이름 (없을 경우 null)"""
+  groupName: String
 }
 
 type DeleteProjectPayload {
@@ -331,6 +337,9 @@ type DeleteProjectPayload {
 
   """회사 ID"""
   companyId: Float!
+
+  """팀 또는 소속 서비스 이름 (없을 경우 null)"""
+  groupName: String
 }
 
 type ProjectGroup {
@@ -384,7 +393,7 @@ type Resume {
   companyList: [Company!]!
 }
 
-type CreateResumeInfoPayload {
+type CreateResumePayload {
   """이력서 제목"""
   title: String!
 
@@ -398,7 +407,7 @@ type CreateResumeInfoPayload {
   blog: String
 }
 
-type UpdateResumeInfoPayload {
+type UpdateResumePayload {
   """이력서 제목"""
   title: String!
 
@@ -439,11 +448,7 @@ type Query {
   ): Resume!
 
   """모든 기술 목록 조회"""
-<<<<<<< HEAD
-  techList: [TechLogo!]!
-=======
   techList(keyword: String): [TechLogo!]!
->>>>>>> d303e5f (feat: 인증 서버 추가, guard 및 decorator gql 전용과 rest 전용으로 분리)
 
   """기술 스택"""
   skillList(
@@ -454,10 +459,10 @@ type Query {
 
 type Mutation {
   """이력서 요약 정보 추가"""
-  Resume_create(input: CreateResumeInfoInput!): CreateResumeInfoPayload!
+  Resume_create(input: CreateResumeInput!): CreateResumePayload!
 
   """이력서 요약 정보 수정"""
-  Resume_update(input: UpdateResumeInfoInput!): UpdateResumeInfoPayload!
+  Resume_update(input: UpdateResumeInput!): UpdateResumePayload!
 
   """이력서 회사 정보 추가"""
   Company_create(input: CreateCompanyInput!): CreateCompanyPayload!
@@ -478,7 +483,7 @@ type Mutation {
   Project_delete(projectId: Int!): DeleteProjectPayload!
 }
 
-input CreateResumeInfoInput {
+input CreateResumeInput {
   """이력서 제목"""
   title: String!
 
@@ -492,7 +497,7 @@ input CreateResumeInfoInput {
   blog: String
 }
 
-input UpdateResumeInfoInput {
+input UpdateResumeInput {
   """이력서 제목"""
   title: String
 
@@ -581,6 +586,9 @@ input CreateProjectInput {
   """회사 ID"""
   companyId: Float!
 
+  """팀 또는 소속 서비스 이름 (없을 경우 null)"""
+  groupName: String
+
   """프로젝트 이름"""
   title: String!
 
@@ -600,6 +608,9 @@ input CreateProjectInput {
 input UpdateProjectInput {
   """회사 ID"""
   companyId: Float!
+
+  """팀 또는 소속 서비스 이름 (없을 경우 null)"""
+  groupName: String
 
   """프로젝트 ID"""
   projectId: Float!

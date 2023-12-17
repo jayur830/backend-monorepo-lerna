@@ -7,7 +7,7 @@ import { GraphQLResolveInfo } from 'graphql';
 
 import { ResumeService } from './resume.service';
 import { Company } from './vo/company.vo';
-import { CreateResumeInfoInput, CreateResumeInfoPayload, DeleteResumeInfoPayload, Resume, ResumeInfo, UpdateResumeInfoInput, UpdateResumeInfoPayload } from './vo/resume.vo';
+import { CreateResumeInput, CreateResumePayload, DeleteResumePayload, Resume, ResumeInfo, UpdateResumeInput, UpdateResumePayload } from './vo/resume.vo';
 
 @Resolver(() => Resume)
 export class ResumeResolver {
@@ -26,14 +26,14 @@ export class ResumeResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => CreateResumeInfoPayload, { description: '이력서 요약 정보 추가' })
-  Resume_create(@GqlUserContext() user: FirebaseUser, @Args({ name: 'input', type: () => CreateResumeInfoInput }) input: CreateResumeInfoInput): Promise<CreateResumeInfoPayload> {
+  @Mutation(() => CreateResumePayload, { description: '이력서 요약 정보 추가' })
+  Resume_create(@GqlUserContext() user: FirebaseUser, @Args({ name: 'input', type: () => CreateResumeInput }) input: CreateResumeInput): Promise<CreateResumePayload> {
     return this.resumeService.createResume(user, input);
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => UpdateResumeInfoPayload, { description: '이력서 요약 정보 수정' })
-  Resume_update(@GqlUserContext() user: FirebaseUser, @Args({ name: 'input', type: () => UpdateResumeInfoInput }) input: UpdateResumeInfoInput): Promise<UpdateResumeInfoPayload> {
+  @Mutation(() => UpdateResumePayload, { description: '이력서 요약 정보 수정' })
+  Resume_update(@GqlUserContext() user: FirebaseUser, @Args({ name: 'input', type: () => UpdateResumeInput }) input: UpdateResumeInput): Promise<UpdateResumePayload> {
     return this.resumeService.updateResume(user, input);
   }
 }
