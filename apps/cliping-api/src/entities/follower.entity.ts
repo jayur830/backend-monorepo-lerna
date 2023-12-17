@@ -11,7 +11,7 @@ import { User } from './user.entity';
 
 @Index('from_user_id', ['fromUserId'], {})
 @Index('to_user_id', ['toUserId'], {})
-@Entity('follower', { schema: 'crazyplace-dev' })
+@Entity('follower', { schema: process.env.MYSQL_DATABASE })
 export class Follower {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

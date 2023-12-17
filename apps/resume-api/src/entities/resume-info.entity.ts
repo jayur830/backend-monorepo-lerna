@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { ResumeCompany } from './resume-company.entity';
 
-@Entity('resume_info', { schema: 'gh-page' })
+@Entity('resume_info', { schema: process.env.MYSQL_DATABASE })
 export class ResumeInfo {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

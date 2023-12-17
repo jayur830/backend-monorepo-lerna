@@ -12,7 +12,7 @@ import { ReviewLike } from './review-like.entity';
 import { User } from './user.entity';
 
 @Index('user_id', ['userId'], {})
-@Entity('review', { schema: 'crazyplace-dev' })
+@Entity('review', { schema: process.env.MYSQL_DATABASE })
 export class Review {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
