@@ -106,10 +106,10 @@ export class OAuthService {
       const user = await auth.getUserByEmail(properties.email);
       const customClaims = {
         ...user.customClaims?.[service],
-        provider: [
+        providers: [
           ...new Set<AuthProvider>([
             ...flattenDeep<AuthProvider>(
-              user?.customClaims?.[service]?.provider || [],
+              user?.customClaims?.[service]?.providers || [],
             ),
             customProvider,
           ]),
@@ -124,11 +124,7 @@ export class OAuthService {
     } catch {
       const uid = this.alphaNumeric(28);
       const customClaims = {
-        id: uid,
-        name: properties.displayName,
-        email: properties.email,
-        provider: [customProvider],
-        created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        providers: [customProvider],
       };
 
       await auth.createUser({ uid, ...properties });
