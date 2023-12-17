@@ -1,10 +1,10 @@
-import { Column, Entity, Index, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { ResumeCompany } from './resume-company.entity';
 import { ResumeProjectTech } from './resume-project-tech.entity';
 
 @Index('resume_company_id', ['resumeCompanyId'], {})
-@Entity('resume_project', { schema: 'gh-page' })
+@Entity('resume_project', { schema: process.env.MYSQL_DATABASE })
 export class ResumeProject {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

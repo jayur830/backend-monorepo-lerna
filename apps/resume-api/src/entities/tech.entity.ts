@@ -1,9 +1,8 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { ResumeProject } from './resume-project.entity';
 import { ResumeProjectTech } from './resume-project-tech.entity';
 
-@Entity('tech', { schema: 'gh-page' })
+@Entity('tech', { schema: process.env.MYSQL_DATABASE })
 export class Tech {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

@@ -6,7 +6,7 @@ import { ResumeProject } from './resume-project.entity';
 
 @Index('resume_info_id', ['resumeInfoId'], {})
 @Index('logo_id', ['logoId'], {})
-@Entity('resume_company', { schema: 'gh-page' })
+@Entity('resume_company', { schema: process.env.MYSQL_DATABASE })
 export class ResumeCompany {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

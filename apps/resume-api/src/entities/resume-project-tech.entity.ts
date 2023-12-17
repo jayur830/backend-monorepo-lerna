@@ -1,11 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 
 import { ResumeProject } from './resume-project.entity';
 import { Tech } from './tech.entity';
 
 @Index('tech_id', ['techId'], {})
 @Index('resume_project_id', ['resumeProjectId'], {})
-@Entity('resume_project_tech', { schema: 'gh-page' })
+@Entity('resume_project_tech', { schema: process.env.MYSQL_DATABASE })
 export class ResumeProjectTech {
   @PrimaryColumn('int', { name: 'tech_id' })
   techId: number;
