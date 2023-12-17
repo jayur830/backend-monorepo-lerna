@@ -24,10 +24,10 @@ export class Resume {
 export class ResumeInfo extends OmitType(Resume, ['companyList']) {}
 
 @ObjectType()
-export class CreateResumeInfoPayload extends OmitType(Resume, ['companyList']) {}
+export class CreateResumePayload extends OmitType(Resume, ['companyList']) {}
 
 @InputType()
-export class CreateResumeInfoInput {
+export class CreateResumeInput {
   @Field({ description: '이력서 제목' })
   title: string;
 
@@ -42,10 +42,10 @@ export class CreateResumeInfoInput {
 }
 
 @ObjectType()
-export class UpdateResumeInfoPayload extends OmitType(Resume, ['companyList']) {}
+export class UpdateResumePayload extends OmitType(Resume, ['companyList']) {}
 
 @InputType()
-export class UpdateResumeInfoInput {
+export class UpdateResumeInput {
   @Field({ description: '이력서 제목', nullable: true })
   title: string | null;
 
@@ -60,4 +60,4 @@ export class UpdateResumeInfoInput {
 }
 
 @ObjectType()
-export class DeleteResumeInfoPayload extends OmitType(Resume, ['companyList']) {}
+export class DeleteResumePayload extends OmitType(Resume, ['companyList']) {}

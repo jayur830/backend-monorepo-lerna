@@ -52,6 +52,7 @@ export class ProjectService {
 
       return {
         companyId: resumeProjectResult.resumeCompanyId,
+        groupName: resumeProjectResult.group,
         projectId: resumeProjectResult.id,
         title: resumeProjectResult.title,
         startDate: dayjs(resumeProjectResult.startDate),
@@ -91,6 +92,7 @@ export class ProjectService {
       const project = await entityManager.findOneBy(ResumeProject, { id: input.projectId });
       const projectResult = {
         companyId: project.resumeCompanyId,
+        groupName: project.group,
         projectId: project.id,
         title: project.title,
         startDate: dayjs(project.startDate),
@@ -148,6 +150,7 @@ export class ProjectService {
       return {
         companyId: resumeProjectResult.resumeCompanyId,
         projectId: resumeProjectResult.id,
+        groupName: resumeProjectResult.group,
         title: resumeProjectResult.title,
         startDate: dayjs(resumeProjectResult.startDate),
         endDate: resumeProjectResult.endDate ? dayjs(resumeProjectResult.endDate) : null,

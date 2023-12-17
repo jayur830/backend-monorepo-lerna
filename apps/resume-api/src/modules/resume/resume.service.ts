@@ -9,7 +9,7 @@ import { ResumeInfo } from '@/entities/resume-info.entity';
 
 import { ResumeProjection } from './types/resume-projection.interface';
 import { Company } from './vo/company.vo';
-import { CreateResumeInfoInput, CreateResumeInfoPayload, DeleteResumeInfoPayload, ResumeInfo as ResumeInfoVO, UpdateResumeInfoInput, UpdateResumeInfoPayload } from './vo/resume.vo';
+import { CreateResumeInput, CreateResumePayload, DeleteResumePayload, ResumeInfo as ResumeInfoVO, UpdateResumeInput, UpdateResumePayload } from './vo/resume.vo';
 
 @Injectable()
 export class ResumeService {
@@ -157,7 +157,7 @@ ORDER BY
     }, []);
   }
 
-  async createResume(user: FirebaseUser, input: CreateResumeInfoInput): Promise<CreateResumeInfoPayload> {
+  async createResume(user: FirebaseUser, input: CreateResumeInput): Promise<CreateResumePayload> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -175,7 +175,7 @@ ORDER BY
     }
   }
 
-  async updateResume(user: FirebaseUser, input: UpdateResumeInfoInput): Promise<UpdateResumeInfoPayload> {
+  async updateResume(user: FirebaseUser, input: UpdateResumeInput): Promise<UpdateResumePayload> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();

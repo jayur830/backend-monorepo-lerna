@@ -9,12 +9,18 @@ import { Project } from '@/vo/project.vo';
 export class CreateProjectPayload extends Project {
   @Field({ description: '회사 ID' })
   companyId: number;
+
+  @Field({ nullable: true, description: '팀 또는 소속 서비스 이름 (없을 경우 null)' })
+  groupName: string | null;
 }
 
 @InputType()
 export class CreateProjectInput {
   @Field({ description: '회사 ID' })
   companyId: number;
+
+  @Field({ nullable: true, description: '팀 또는 소속 서비스 이름 (없을 경우 null)' })
+  groupName: string | null;
 
   @Field({ description: '프로젝트 이름' })
   title: string;
@@ -36,12 +42,18 @@ export class CreateProjectInput {
 export class UpdateProjectPayload extends Project {
   @Field({ description: '회사 ID' })
   companyId: number;
+
+  @Field({ nullable: true, description: '팀 또는 소속 서비스 이름 (없을 경우 null)' })
+  groupName: string | null;
 }
 
 @InputType()
 export class UpdateProjectInput {
   @Field({ description: '회사 ID' })
   companyId: number;
+
+  @Field({ nullable: true, description: '팀 또는 소속 서비스 이름 (없을 경우 null)' })
+  groupName: string | null;
 
   @Field({ description: '프로젝트 ID' })
   projectId: number;
@@ -66,4 +78,7 @@ export class UpdateProjectInput {
 export class DeleteProjectPayload extends Project {
   @Field({ description: '회사 ID' })
   companyId: number;
+
+  @Field({ nullable: true, description: '팀 또는 소속 서비스 이름 (없을 경우 null)' })
+  groupName: string | null;
 }
