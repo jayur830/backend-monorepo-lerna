@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, PickType } from '@nestjs/graphql';
 
 import { Profile } from './profile.vo';
 
@@ -6,9 +6,6 @@ import { Profile } from './profile.vo';
 export class User {
   @Field(() => String, { description: '유저 ID (PK)' })
   id: string;
-
-  @Field(() => String, { description: '닉네임', nullable: true })
-  nickName: string;
 
   @Field(() => String, { description: '생성일자' })
   createdAt: string;
@@ -25,3 +22,6 @@ export class User {
   @Field(() => Int, { description: '작성한 리뷰 수' })
   reviewCount: number;
 }
+
+@ObjectType()
+export class UserSummary extends PickType(User, ['id', 'createdAt']) {}

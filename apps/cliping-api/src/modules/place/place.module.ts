@@ -3,12 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { PlaceLike } from '@/entities/place-like.entity';
 
-import { PlaceMutationResolver } from './place.mutation.resolver';
-import { PlaceQueryResolver } from './place.query.resolver';
+import { PlaceResolver } from './place.resolver';
 import { PlaceService } from './place.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PlaceLike])],
-  providers: [PlaceQueryResolver, PlaceMutationResolver, PlaceService],
+  providers: [PlaceResolver, PlaceService],
 })
 export class PlaceModule {}

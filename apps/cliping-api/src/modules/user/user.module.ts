@@ -5,21 +5,22 @@ import { FirebaseModule, FirebaseService } from '@toy/firebase';
 import { Follower } from '@/entities/follower.entity';
 import { Profile } from '@/entities/profile.entity';
 import { Review } from '@/entities/review.entity';
-import { User } from '@/entities/user.entity';
+import { FollowerService } from '@/modules/follower/follower.service';
+import { ProfileService } from '@/modules/profile/profile.service';
 
-import { UserMutationResolver } from './user.mutation.resolver';
-import { UserQueryResolver } from './user.query.resolver';
+import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 
 @Module({
   imports: [
     FirebaseModule,
-    TypeOrmModule.forFeature([User, Profile, Follower, Review]),
+    TypeOrmModule.forFeature([Profile, Follower, Review]),
   ],
   providers: [
-    UserQueryResolver,
-    UserMutationResolver,
+    UserResolver,
     UserService,
+    ProfileService,
+    FollowerService,
     FirebaseService,
   ],
 })
