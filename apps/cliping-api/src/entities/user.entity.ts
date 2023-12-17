@@ -7,7 +7,7 @@ import { Profile } from './profile.entity';
 import { Review } from './review.entity';
 import { ReviewLike } from './review-like.entity';
 
-@Entity('user', { schema: 'crazyplace-dev' })
+@Entity('user', { schema: process.env.MYSQL_DATABASE })
 export class User {
   @Column('varchar', { primary: true, name: 'id', length: 64 })
   id: string;

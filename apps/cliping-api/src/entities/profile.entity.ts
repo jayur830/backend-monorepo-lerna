@@ -10,7 +10,7 @@ import {
 import { User } from './user.entity';
 
 @Index('user_id', ['userId'], {})
-@Entity('profile', { schema: 'crazyplace-dev' })
+@Entity('profile', { schema: process.env.MYSQL_DATABASE })
 export class Profile {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

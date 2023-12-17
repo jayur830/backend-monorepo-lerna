@@ -3,7 +3,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 
 @Index('user_id', ['userId'], {})
-@Entity('place_rating', { schema: 'crazyplace-dev' })
+@Entity('place_rating', { schema: process.env.MYSQL_DATABASE })
 export class PlaceRating {
   @Column('varchar', { primary: true, name: 'place_id', length: 32 })
   placeId: string;
