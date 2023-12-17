@@ -1,4 +1,4 @@
-import { Controller, Headers, Post } from '@nestjs/common';
+import { Controller, Headers, Param, Post } from '@nestjs/common';
 
 import { OAuthService } from './oauth.service';
 import { CustomTokenResponse } from './types/custom-token.interface';
@@ -7,17 +7,19 @@ import { CustomTokenResponse } from './types/custom-token.interface';
 export class OAuthController {
   constructor(private readonly authService: OAuthService) {}
 
-  @Post('/kakao')
+  @Post('/kakao/:service')
   authenticateKakao(
+    @Param('service') service: string,
     @Headers('authorization') authorization?: string,
   ): Promise<CustomTokenResponse> {
-    return this.authService.authenticateKakao(authorization);
+    return this.authService.authenticateKakao(service, authorization);
   }
 
-  @Post('/naver')
+  @Post('/naver/:service')
   authenticateNaver(
+    @Param('service') service: string,
     @Headers('authorization') authorization?: string,
   ): Promise<CustomTokenResponse> {
-    return this.authService.authenticateNaver(authorization);
+    return this.authService.authenticateNaver(service, authorization);
   }
 }
