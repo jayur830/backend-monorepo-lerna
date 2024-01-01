@@ -12,7 +12,10 @@ import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [FirebaseModule, TypeOrmModule.forFeature([Profile, Review])],
+  imports: [
+    FirebaseModule,
+    TypeOrmModule.forFeature([Profile, Follower, Review]),
+  ],
   providers: [
     UserResolver,
     UserService,
