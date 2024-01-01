@@ -43,19 +43,12 @@ export class ProfileService {
     await queryRunner.startTransaction();
 
     try {
-      const repository = queryRunner.manager.withRepository(
-        this.profileRepository,
-      );
-      await repository
-        .createQueryBuilder()
-        .update()
-        .set(input)
-        .where('user_id = :id', { id: user.uid })
-        .execute();
+      await queryRunner.manager.update(Profile, { userId: user.uid }, input);
       await queryRunner.commitTransaction();
-      const { id: profileId, ...result } = await repository.findOneBy({
-        userId: user.uid,
-      });
+      const { id: profileId, ...result } = await queryRunner.manager.findOneBy(
+        Profile,
+        { userId: user.uid },
+      );
       return { id: user.uid, ...result };
     } catch (error) {
       this.logger.error(error);

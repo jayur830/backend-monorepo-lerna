@@ -24,8 +24,6 @@ export class UserService {
     private readonly firebaseService: FirebaseService,
     private readonly profileService: ProfileService,
     private readonly followerService: FollowerService,
-    @InjectRepository(Follower)
-    private readonly followerRepository: Repository<Follower>,
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
   ) {}
@@ -66,6 +64,10 @@ export class UserService {
     id: string,
     follow: boolean,
   ): Promise<UserVO> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
       await this.firebaseService.getAuth().getUser(id);
     } catch {
@@ -74,30 +76,39 @@ export class UserService {
       });
     }
 
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
     try {
-      const repository = queryRunner.manager.withRepository(
-        this.followerRepository,
-      );
-      const exists = await this.followerRepository.exist({
+      // const repository = queryRunner.manager.withRepository(
+      //   this.followerRepository,
+      // );
+      const exists = await queryRunner.manager.exists(Follower, {
         where: { fromUserId: claims.uid, toUserId: id },
       });
+      // const exists = await this.followerRepository.exist({
+      //   where: { fromUserId: claims.uid, toUserId: id },
+      // });
       if (follow && !exists) {
         /**
          * @description 대상을 팔로우를 하며, 이전에 팔로우한 내역이 존재하지 않을 경우
          */
-        await repository.save([{ fromUserId: claims.uid, toUserId: id }]);
+        await queryRunner.manager.save(Follower, [
+          {
+            fromUserId: claims.uid,
+            toUserId: id,
+          },
+        ]);
+        // await repository.save([{ fromUserId: claims.uid, toUserId: id }]);
       } else if (exists) {
         /**
          * @description 대상을 언팔로우 하며, 이전에 팔로우한 내역이 존재할 경우
          */
-        await repository.delete({
+        await queryRunner.manager.delete(Follower, {
           fromUserId: claims.uid,
           toUserId: id,
         });
+        // await repository.delete({
+        //   fromUserId: claims.uid,
+        //   toUserId: id,
+        // });
       }
       await queryRunner.commitTransaction();
 

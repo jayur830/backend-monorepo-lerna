@@ -26,6 +26,6 @@ export class PlaceService {
       await this.placeLikeRepository.delete(criteria);
     }
 
-    return await this.placeLikeRepository.count({ where: { placeId } });
+    return await this.placeLikeRepository.countBy({ placeId });
   }
 }

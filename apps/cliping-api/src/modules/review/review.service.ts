@@ -182,7 +182,7 @@ export class ReviewService {
       await this.reviewLikeRepository.delete(criteria);
     }
 
-    return await this.reviewLikeRepository.count({ where: { reviewId } });
+    return await this.reviewLikeRepository.countBy({ reviewId });
   }
 
   private getReviewListQuery(limit: number, offset: number, where: string) {
