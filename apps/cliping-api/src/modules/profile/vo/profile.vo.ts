@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, PartialType } from '@nestjs/graphql';
 
 @ObjectType({ description: '프로필 상세' })
 export class Profile {
@@ -28,25 +28,7 @@ export class UpdateProfilePayload extends Profile {
 }
 
 @InputType({ description: '프로필 상세 정보 입력' })
-export class UpdateProfileInput {
+export class UpdateProfileInput extends PartialType(Profile) {
   @Field(() => String, { description: '유저 ID (PK)' })
   id: string;
-
-  @Field(() => String, { description: '닉네임', nullable: true })
-  nickName?: string | null;
-
-  @Field(() => String, { description: '소개', nullable: true })
-  description?: string | null;
-
-  @Field(() => String, { description: '프로필 부제목', nullable: true })
-  subTitle?: string | null;
-
-  @Field(() => String, { description: '커버 사진 URL', nullable: true })
-  backgroundImageUrl?: string | null;
-
-  @Field(() => String, { description: '프로필 사진 URL', nullable: true })
-  profileImageUrl?: string | null;
-
-  @Field(() => String, { description: '인스타그램 URL', nullable: true })
-  instagramUrl?: string | null;
 }

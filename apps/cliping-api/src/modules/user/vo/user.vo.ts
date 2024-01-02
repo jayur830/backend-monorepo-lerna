@@ -1,4 +1,6 @@
 import { Field, Int, ObjectType, PickType } from '@nestjs/graphql';
+import { Dayjs } from 'dayjs';
+import { DateTimeScalar } from '@toy/scalar';
 
 import { Profile } from './profile.vo';
 
@@ -7,8 +9,8 @@ export class User {
   @Field(() => String, { description: '유저 ID (PK)' })
   id: string;
 
-  @Field(() => String, { description: '생성일자' })
-  createdAt: string;
+  @Field(() => DateTimeScalar, { description: '생성일자' })
+  createdAt: Dayjs;
 
   @Field(() => Profile, { description: '프로필 상세' })
   profile: Profile;

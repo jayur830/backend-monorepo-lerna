@@ -1,6 +1,7 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType, PartialType } from '@nestjs/graphql';
 
-@ObjectType()
+@InputType({ isAbstract: true })
+@ObjectType({ isAbstract: true })
 export class Image {
   @Field({ description: '이미지 src (url)' })
   src: string;
@@ -14,3 +15,9 @@ export class Image {
   @Field(() => Int, { description: '이미지 height' })
   height: number;
 }
+
+@InputType()
+export class CreateImageInput extends Image {}
+
+@InputType()
+export class UpdateImageInput extends PartialType(Image) {}

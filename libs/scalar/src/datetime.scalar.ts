@@ -4,7 +4,7 @@ import { Kind, ValueNode } from 'graphql';
 
 @Scalar('DateTime')
 export class DateTimeScalar implements CustomScalar<string, dayjs.Dayjs> {
-  format = 'YYYY-MM-DD HH:mm:ss';
+  format = 'YYYY-MM-DDTHH:mm:ss+09:00';
   description = `${this.format} 형식의 문자열`;
 
   parseValue(value: string) {

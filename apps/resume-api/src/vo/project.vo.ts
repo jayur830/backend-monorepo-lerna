@@ -1,13 +1,14 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Dayjs } from 'dayjs';
+import { IDScalar, MonthScalar } from '@toy/scalar';
 
 import { TechLogo } from '@/enums/logo.enum';
-import { MonthScalar } from '@/scalars/date/month.scalar';
 
-@ObjectType()
+@InputType({ isAbstract: true })
+@ObjectType({ isAbstract: true })
 export class Project {
-  @Field({ description: '프로젝트 ID' })
-  projectId: number;
+  @Field(() => IDScalar, { description: '프로젝트 ID' })
+  projectId: string;
 
   @Field({ description: '프로젝트 이름' })
   title: string;

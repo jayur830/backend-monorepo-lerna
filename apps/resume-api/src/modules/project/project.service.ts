@@ -53,7 +53,7 @@ export class ProjectService {
       return {
         companyId: resumeProjectResult.resumeCompanyId,
         groupName: resumeProjectResult.group,
-        projectId: resumeProjectResult.id,
+        projectId: `${resumeProjectResult.id}`,
         title: resumeProjectResult.title,
         startDate: dayjs(resumeProjectResult.startDate),
         endDate: resumeProjectResult.endDate ? dayjs(resumeProjectResult.endDate) : null,
@@ -116,6 +116,7 @@ export class ProjectService {
 
         return {
           ...projectResult,
+          projectId: `${projectResult.projectId}`,
           techList: resumeProjectTechResult.map((item) => item.tech.name as TechLogo),
         };
       } else {
@@ -124,6 +125,7 @@ export class ProjectService {
 
         return {
           ...projectResult,
+          projectId: `${projectResult.projectId}`,
           techList: techList.map((item) => item.tech.name as TechLogo),
         };
       }
@@ -149,7 +151,7 @@ export class ProjectService {
 
       return {
         companyId: resumeProjectResult.resumeCompanyId,
-        projectId: resumeProjectResult.id,
+        projectId: `${resumeProjectResult.id}`,
         groupName: resumeProjectResult.group,
         title: resumeProjectResult.title,
         startDate: dayjs(resumeProjectResult.startDate),

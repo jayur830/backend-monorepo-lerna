@@ -46,7 +46,7 @@ export class CompanyService {
       await queryRunner.commitTransaction();
 
       return {
-        companyId: companyInfoResult.id,
+        companyId: `${companyInfoResult.id}`,
         companyName: companyInfoResult.name,
         logo: companyLogoResult,
         startDate: dayjs(companyInfoResult.startDate),
@@ -81,14 +81,14 @@ export class CompanyService {
           description: input.description,
         },
       );
-      const companyInfoResult = await entityManager.findOneBy(ResumeCompany, { id: input.companyId, resumeInfoId: resumeInfo.id });
+      const companyInfoResult = await entityManager.findOneBy(ResumeCompany, { id: +input.companyId, resumeInfoId: resumeInfo.id });
       await entityManager.update(CompanyLogo, { id: companyInfoResult.logoId }, input.logo);
       const companyLogoResult = await entityManager.findOneBy(CompanyLogo, { id: companyInfoResult.logoId });
 
       await queryRunner.commitTransaction();
 
       return {
-        companyId: companyInfoResult.id,
+        companyId: `${companyInfoResult.id}`,
         companyName: companyInfoResult.name,
         logo: companyLogoResult,
         startDate: dayjs(companyInfoResult.startDate),
@@ -132,7 +132,7 @@ export class CompanyService {
       await queryRunner.commitTransaction();
 
       return {
-        companyId: company.id,
+        companyId: `${company.id}`,
         companyName: company.name,
         logo: company.logo,
         startDate: dayjs(company.startDate),

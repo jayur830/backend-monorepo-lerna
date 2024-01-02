@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { Project } from '../../../vo/project.vo';
+import { Project } from '@/vo/project.vo';
 
 @ObjectType()
 export class ProjectGroup {

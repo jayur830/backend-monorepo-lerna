@@ -1,4 +1,13 @@
-import { Field, InputType, Int, ObjectType, OmitType } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  Int,
+  ObjectType,
+  OmitType,
+  PartialType,
+} from '@nestjs/graphql';
+import { Dayjs } from 'dayjs';
+import { DateTimeScalar } from '@toy/scalar';
 
 import { ReviewUser } from './review-user.vo';
 
@@ -31,11 +40,11 @@ export class Review {
   @Field(() => String, { description: '인스타그램 업로드 URL', nullable: true })
   instagramPostUrl: string | null;
 
-  @Field(() => String, { description: '리뷰 생성일자' })
-  createdAt: string;
+  @Field(() => DateTimeScalar, { description: '리뷰 생성일자' })
+  createdAt: Dayjs;
 
-  @Field(() => String, { description: '리뷰 수정일자' })
-  updatedAt: string;
+  @Field(() => DateTimeScalar, { description: '리뷰 수정일자' })
+  updatedAt: Dayjs;
 }
 
 @ObjectType()
@@ -47,25 +56,13 @@ export class CreateReviewPayload extends OmitType(Review, [
 ]) {}
 
 @InputType()
-export class CreateReviewInput {
-  @Field(() => String, { description: '장소 ID' })
-  placeId: string;
-
-  @Field(() => String, { description: '리뷰 제목' })
-  title: string;
-
-  @Field(() => String, { description: '리뷰 내용', nullable: true })
-  content: string | null;
-
-  @Field(() => String, { description: '첨부 이미지', nullable: true })
-  imageUrl: string | null;
-
-  @Field(() => Int, { description: '평점' })
-  rating: number;
-
-  @Field(() => String, { description: '인스타그램 업로드 URL', nullable: true })
-  instagramPostUrl: string | null;
-}
+export class CreateReviewInput extends OmitType(Review, [
+  'id',
+  'user',
+  'like',
+  'createdAt',
+  'updatedAt',
+]) {}
 
 @ObjectType()
 export class UpdateReviewPayload extends OmitType(Review, [
@@ -76,25 +73,9 @@ export class UpdateReviewPayload extends OmitType(Review, [
 ]) {}
 
 @InputType({ description: '리뷰 정보 수정' })
-export class UpdateReviewInput {
+export class UpdateReviewInput extends PartialType(
+  OmitType(Review, ['user', 'like', 'createdAt', 'updatedAt']),
+) {
   @Field(() => Int, { description: '리뷰 ID (PK)' })
   id: number;
-
-  @Field(() => String, { description: '리뷰 제목', nullable: true })
-  title: string | null;
-
-  @Field(() => String, { description: '리뷰 내용', nullable: true })
-  content: string | null;
-
-  @Field(() => String, { description: '첨부 이미지', nullable: true })
-  imageUrl: string | null;
-
-  @Field(() => Int, { description: '평점', nullable: true, defaultValue: 0 })
-  rating: number | null;
-
-  @Field(() => String, { description: '인스타그램 업로드 URL', nullable: true })
-  instagramPostUrl: string | null;
-
-  @Field(() => String, { description: '장소 ID' })
-  placeId: string;
 }

@@ -44,9 +44,7 @@ export class UserService {
 
       return {
         id,
-        createdAt: dayjs(firebaseUser.metadata.creationTime).format(
-          'YYYY-MM-DD HH:mm:ss',
-        ),
+        createdAt: dayjs(firebaseUser.metadata.creationTime),
       };
     } catch {
       throw new GraphQLError('해당하는 유저가 없습니다.', {
