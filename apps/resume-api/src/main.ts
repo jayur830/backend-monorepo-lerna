@@ -7,6 +7,20 @@ async function bootstrap() {
   const port = process.env.PORT;
   const env = process.env.NODE_ENV;
   await app.listen(port);
+  console.log(
+    `\n${JSON.stringify(
+      {
+        type: 'mysql',
+        host: process.env.MYSQL_HOST,
+        port: +process.env.MYSQL_PORT,
+        username: process.env.MYSQL_USERNAME,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE,
+      },
+      null,
+      2,
+    )}\n`,
+  );
   console.log('Environment:', env);
   console.log(`Server is listening port ${port}.`);
 }
