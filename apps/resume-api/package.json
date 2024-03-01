@@ -1,6 +1,6 @@
 {
   "name": "resume-api",
-  "version": "1.3.6",
+  "version": "1.3.12",
   "description": "",
   "author": "",
   "private": true,
@@ -31,6 +31,7 @@
     "@toy/decorator": "*",
     "@toy/firebase": "*",
     "@toy/guard": "*",
+    "@toy/scalar": "*",
     "dayjs": "^1.11.10",
     "firebase-admin": "^11.11.1",
     "graphql": "^16.8.1",

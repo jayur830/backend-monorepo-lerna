@@ -1,15 +1,5 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { User } from './user.entity';
-
-@Index('user_id', ['userId'], {})
 @Entity('profile', { schema: process.env.MYSQL_DATABASE })
 export class Profile {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
@@ -21,33 +11,22 @@ export class Profile {
   @Column('varchar', { name: 'description', nullable: true, length: 4096 })
   description: string | null;
 
-  @Column('varchar', { name: 'sub_title', nullable: true, length: 255 })
+  @Column('varchar', { name: 'sub_title', nullable: true, length: 256 })
   subTitle: string | null;
 
   @Column('varchar', {
     name: 'background_image_url',
     nullable: true,
-    length: 127,
+    length: 128,
   })
   backgroundImageUrl: string | null;
 
-  @Column('varchar', { name: 'profile_image_url', nullable: true, length: 127 })
+  @Column('varchar', { name: 'profile_image_url', nullable: true, length: 128 })
   profileImageUrl: string | null;
 
-  @Column('varchar', {
-    name: 'instagram_url',
-    nullable: true,
-    length: 127,
-  })
+  @Column('varchar', { name: 'instagram_url', nullable: true, length: 128 })
   instagramUrl: string | null;
 
-  @Column('varchar', { name: 'user_id', length: 64 })
+  @Column('varchar', { name: 'user_id', length: 28 })
   userId: string;
-
-  @OneToOne(() => User, (user) => user.profile, {
-    onDelete: 'NO ACTION',
-    onUpdate: 'NO ACTION',
-  })
-  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
-  user: User;
 }

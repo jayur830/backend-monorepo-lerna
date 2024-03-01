@@ -1,14 +1,14 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Dayjs } from 'dayjs';
-
-import { MonthScalar } from '@/scalars/date/month.scalar';
+import { IDScalar, MonthScalar } from '@toy/scalar';
 
 import { Image } from './image.vo';
 
-@ObjectType()
+@InputType({ isAbstract: true })
+@ObjectType({ isAbstract: true })
 export class CompanyInfo {
-  @Field({ description: '회사 ID' })
-  companyId: number;
+  @Field(() => IDScalar, { description: '회사 ID' })
+  companyId: string;
 
   @Field({ description: '회사 이름' })
   companyName: string;

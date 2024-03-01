@@ -2,23 +2,9 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Image {
-  """이미지 src (url)"""
-  src: String!
-
-  """이미지 alt"""
-  alt: String!
-
-  """이미지 width"""
-  width: Int!
-
-  """이미지 height"""
-  height: Int!
-}
-
 type CreateCompanyPayload {
   """회사 ID"""
-  companyId: Float!
+  companyId: ID!
 
   """회사 이름"""
   companyName: String!
@@ -39,9 +25,23 @@ type CreateCompanyPayload {
   description: String
 }
 
+type Image {
+  """이미지 src (url)"""
+  src: String!
+
+  """이미지 alt"""
+  alt: String!
+
+  """이미지 width"""
+  width: Int!
+
+  """이미지 height"""
+  height: Int!
+}
+
 type UpdateCompanyPayload {
   """회사 ID"""
-  companyId: Float!
+  companyId: ID!
 
   """회사 이름"""
   companyName: String!
@@ -64,7 +64,7 @@ type UpdateCompanyPayload {
 
 type DeleteCompanyPayload {
   """회사 ID"""
-  companyId: Float!
+  companyId: ID!
 
   """회사 이름"""
   companyName: String!
@@ -85,9 +85,9 @@ type DeleteCompanyPayload {
   description: String
 }
 
-type Project {
+type CreateProjectPayload {
   """프로젝트 ID"""
-  projectId: Float!
+  projectId: ID!
 
   """프로젝트 이름"""
   title: String!
@@ -103,6 +103,12 @@ type Project {
 
   """프로젝트 설명 MARKDOWN (성과/결과)"""
   description: String!
+
+  """회사 ID"""
+  companyId: ID!
+
+  """팀 또는 소속 서비스 이름 (없을 경우 null)"""
+  groupName: String
 }
 
 """프레임워크, 라이브러리 로고"""
@@ -264,35 +270,9 @@ enum TechLogo {
   Figma
 }
 
-type CreateProjectPayload {
-  """프로젝트 ID"""
-  projectId: Float!
-
-  """프로젝트 이름"""
-  title: String!
-
-  """프로젝트 시작월"""
-  startDate: Month!
-
-  """프로젝트 종료월 (진행중일 경우 null)"""
-  endDate: Month
-
-  """프로젝트에 쓰인 기술 태그 목록"""
-  techList: [TechLogo!]!
-
-  """프로젝트 설명 MARKDOWN (성과/결과)"""
-  description: String!
-
-  """회사 ID"""
-  companyId: Float!
-
-  """팀 또는 소속 서비스 이름 (없을 경우 null)"""
-  groupName: String
-}
-
 type UpdateProjectPayload {
   """프로젝트 ID"""
-  projectId: Float!
+  projectId: ID!
 
   """프로젝트 이름"""
   title: String!
@@ -310,7 +290,7 @@ type UpdateProjectPayload {
   description: String!
 
   """회사 ID"""
-  companyId: Float!
+  companyId: ID!
 
   """팀 또는 소속 서비스 이름 (없을 경우 null)"""
   groupName: String
@@ -318,7 +298,7 @@ type UpdateProjectPayload {
 
 type DeleteProjectPayload {
   """프로젝트 ID"""
-  projectId: Float!
+  projectId: ID!
 
   """프로젝트 이름"""
   title: String!
@@ -336,7 +316,7 @@ type DeleteProjectPayload {
   description: String!
 
   """회사 ID"""
-  companyId: Float!
+  companyId: ID!
 
   """팀 또는 소속 서비스 이름 (없을 경우 null)"""
   groupName: String
@@ -350,9 +330,29 @@ type ProjectGroup {
   list: [Project!]!
 }
 
+type Project {
+  """프로젝트 ID"""
+  projectId: ID!
+
+  """프로젝트 이름"""
+  title: String!
+
+  """프로젝트 시작월"""
+  startDate: Month!
+
+  """프로젝트 종료월 (진행중일 경우 null)"""
+  endDate: Month
+
+  """프로젝트에 쓰인 기술 태그 목록"""
+  techList: [TechLogo!]!
+
+  """프로젝트 설명 MARKDOWN (성과/결과)"""
+  description: String!
+}
+
 type Company {
   """회사 ID"""
-  companyId: Float!
+  companyId: ID!
 
   """회사 이름"""
   companyName: String!
@@ -453,7 +453,7 @@ type Query {
   """기술 스택"""
   skillList(
     """유저 ID"""
-    userId: String!
+    userId: ID!
   ): [Skill!]!
 }
 
@@ -515,9 +515,6 @@ input CreateCompanyInput {
   """회사 이름"""
   companyName: String!
 
-  """회사 로고"""
-  logo: CreateImageInput
-
   """입사일"""
   startDate: Month!
 
@@ -529,6 +526,9 @@ input CreateCompanyInput {
 
   """회사에 대한 간단한 설명"""
   description: String
+
+  """회사 로고"""
+  logo: CreateImageInput
 }
 
 input CreateImageInput {
@@ -546,14 +546,8 @@ input CreateImageInput {
 }
 
 input UpdateCompanyInput {
-  """회사 ID"""
-  companyId: Float!
-
   """회사 이름"""
   companyName: String
-
-  """회사 로고"""
-  logo: UpdateImageInput
 
   """입사일"""
   startDate: Month
@@ -566,6 +560,12 @@ input UpdateCompanyInput {
 
   """회사에 대한 간단한 설명"""
   description: String
+
+  """회사 ID"""
+  companyId: ID!
+
+  """회사 로고"""
+  logo: UpdateImageInput
 }
 
 input UpdateImageInput {
@@ -584,7 +584,7 @@ input UpdateImageInput {
 
 input CreateProjectInput {
   """회사 ID"""
-  companyId: Float!
+  companyId: ID!
 
   """팀 또는 소속 서비스 이름 (없을 경우 null)"""
   groupName: String
@@ -607,13 +607,10 @@ input CreateProjectInput {
 
 input UpdateProjectInput {
   """회사 ID"""
-  companyId: Float!
+  companyId: ID!
 
   """팀 또는 소속 서비스 이름 (없을 경우 null)"""
   groupName: String
-
-  """프로젝트 ID"""
-  projectId: Float!
 
   """프로젝트 이름"""
   title: String
@@ -629,4 +626,7 @@ input UpdateProjectInput {
 
   """프로젝트 설명 MARKDOWN (성과/결과)"""
   description: String
+
+  """프로젝트 ID"""
+  projectId: Float!
 }

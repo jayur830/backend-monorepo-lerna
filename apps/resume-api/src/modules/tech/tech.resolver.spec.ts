@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { TechResolver } from './tech.resolver';
 
 describe('TechResolver', () => {

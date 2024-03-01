@@ -2,28 +2,55 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""리뷰 정보"""
-type ReviewPayload {
-  """리뷰 ID (PK)"""
-  id: Int!
+"""팔로워 유저 또는 팔로잉 유저"""
+type Follow {
+  """유저 ID (PK)"""
+  id: String!
 
-  """리뷰 제목"""
-  title: String!
+  """닉네임"""
+  nickName: String!
 
-  """리뷰 내용"""
-  content: String!
+  """프로필 사진 URL"""
+  profileImageUrl: String
+}
 
-  """첨부 이미지"""
-  imageUrl: String
+"""팔로잉/팔로워 데이터 Pagination"""
+type FollowPagination {
+  """limit"""
+  limit: Int!
 
-  """평점"""
-  rating: Int!
+  """offset"""
+  offset: Int!
 
-  """인스타그램 업로드 URL"""
-  instagramPostUrl: String
+  """total"""
+  total: Int!
 
-  """리뷰 장소"""
-  placeId: String!
+  """팔로잉/팔로워 목록"""
+  list: [Follow!]!
+}
+
+"""프로필 상세 정보"""
+type UpdateProfilePayload {
+  """닉네임"""
+  nickName: String
+
+  """소개"""
+  description: String
+
+  """프로필 부제목"""
+  subTitle: String
+
+  """커버 사진 URL"""
+  backgroundImageUrl: String
+
+  """프로필 사진 URL"""
+  profileImageUrl: String
+
+  """인스타그램 URL"""
+  instagramUrl: String
+
+  """유저 ID (PK)"""
+  id: String!
 }
 
 """리뷰 작성 유저"""
@@ -71,6 +98,52 @@ type Review {
   updatedAt: String!
 }
 
+type CreateReviewPayload {
+  """리뷰 ID (PK)"""
+  id: Int!
+
+  """장소 ID"""
+  placeId: String!
+
+  """리뷰 제목"""
+  title: String!
+
+  """리뷰 내용"""
+  content: String
+
+  """첨부 이미지"""
+  imageUrl: String
+
+  """평점"""
+  rating: Int!
+
+  """인스타그램 업로드 URL"""
+  instagramPostUrl: String
+}
+
+type UpdateReviewPayload {
+  """리뷰 ID (PK)"""
+  id: Int!
+
+  """장소 ID"""
+  placeId: String!
+
+  """리뷰 제목"""
+  title: String!
+
+  """리뷰 내용"""
+  content: String
+
+  """첨부 이미지"""
+  imageUrl: String
+
+  """평점"""
+  rating: Int!
+
+  """인스타그램 업로드 URL"""
+  instagramPostUrl: String
+}
+
 """리뷰 데이터 Pagination"""
 type ReviewPagination {
   """limit"""
@@ -79,104 +152,23 @@ type ReviewPagination {
   """offset"""
   offset: Int!
 
-  """전체 데이터 개수"""
+  """total"""
   total: Int!
 
   """리뷰 목록"""
-  list: [Review!]!
+  list(
+    """검색 필터 (placeId: 장소 ID, keyword: 검색어)"""
+    filter: ReviewFilter = {placeId: null, keyword: null}
+  ): [Review!]!
 }
 
-"""프로필 상세"""
-type Profile {
-  """소개"""
-  description: String
+"""리뷰 검색 필터"""
+input ReviewFilter {
+  """장소 ID (PK)"""
+  placeId: String
 
-  """프로필 부제목"""
-  subTitle: String
-
-  """커버 사진 URL"""
-  backgroundImageUrl: String
-
-  """프로필 사진 URL"""
-  profileImageUrl: String
-
-  """인스타그램 URL"""
-  instagramUrl: String
-}
-
-"""프로필 상세 정보"""
-type UpdateProfilePayload {
-  """소개"""
-  description: String
-
-  """프로필 부제목"""
-  subTitle: String
-
-  """커버 사진 URL"""
-  backgroundImageUrl: String
-
-  """프로필 사진 URL"""
-  profileImageUrl: String
-
-  """인스타그램 URL"""
-  instagramUrl: String
-
-  """유저 ID (PK)"""
-  id: String!
-
-  """닉네임"""
-  nickName: String!
-}
-
-"""유저 상세 정보"""
-type User {
-  """유저 ID (PK)"""
-  id: String!
-
-  """닉네임"""
-  nickName: String
-
-  """생성일자"""
-  createdAt: String!
-
-  """프로필 상세"""
-  profile: Profile!
-
-  """팔로워 수"""
-  followerCount: Int!
-
-  """팔로잉 수"""
-  followingCount: Int!
-
-  """작성한 리뷰 수"""
-  reviewCount: Int!
-}
-
-"""팔로워 유저 또는 팔로잉 유저"""
-type Follow {
-  """유저 ID (PK)"""
-  id: String!
-
-  """닉네임"""
-  nickName: String!
-
-  """프로필 사진 URL"""
-  profileImageUrl: String
-}
-
-"""팔로잉/팔로워 데이터 Pagination"""
-type FollowPagination {
-  """limit"""
-  limit: Int!
-
-  """offset"""
-  offset: Int!
-
-  """전체 데이터 개수"""
-  total: Int!
-
-  """팔로잉/팔로워 목록"""
-  list: [Follow!]!
+  """검색어"""
+  keyword: String
 }
 
 """로그인한 유저의 개인 정보"""
@@ -194,6 +186,48 @@ type Me {
   providers: [String!]!
 }
 
+"""프로필 상세"""
+type Profile {
+  """닉네임"""
+  nickName: String
+
+  """소개"""
+  description: String
+
+  """프로필 부제목"""
+  subTitle: String
+
+  """커버 사진 URL"""
+  backgroundImageUrl: String
+
+  """프로필 사진 URL"""
+  profileImageUrl: String
+
+  """인스타그램 URL"""
+  instagramUrl: String
+}
+
+"""유저 상세 정보"""
+type User {
+  """유저 ID (PK)"""
+  id: String!
+
+  """생성일자"""
+  createdAt: String!
+
+  """프로필 상세"""
+  profile: Profile!
+
+  """팔로워 수"""
+  followerCount: Int!
+
+  """팔로잉 수"""
+  followingCount: Int!
+
+  """작성한 리뷰 수"""
+  reviewCount: Int!
+}
+
 type Query {
   """장소에 대한 좋아요 수"""
   placeLikeCount(
@@ -208,9 +242,6 @@ type Query {
 
     """offset"""
     offset: Int = 0
-
-    """검색 필터 (placeId: 장소 ID, keyword: 검색어)"""
-    filter: ReviewFilter = {placeId: null, keyword: null}
   ): ReviewPagination!
 
   """
@@ -258,21 +289,12 @@ type Query {
   followingList(limit: Int = 10, offset: Int = 0): FollowPagination!
 }
 
-"""리뷰 검색 필터"""
-input ReviewFilter {
-  """장소 ID (PK)"""
-  placeId: String
-
-  """검색어"""
-  keyword: String
-}
-
 type Mutation {
   """장소 좋아요 누르기"""
   Place_like(placeId: String!): Int!
 
   """리뷰 등록"""
-  Review_create(input: CreateReviewInput!): ReviewPayload!
+  Review_create(input: CreateReviewInput!): CreateReviewPayload!
 
   """
   리뷰 수정
@@ -288,7 +310,7 @@ type Mutation {
   }
   ```
   """
-  Review_update(input: UpdateReviewInput!): ReviewPayload!
+  Review_update(input: UpdateReviewInput!): UpdateReviewPayload!
 
   """
   리뷰 좋아요 누르기
@@ -336,25 +358,24 @@ type Mutation {
   Profile_update(input: UpdateProfileInput!): UpdateProfilePayload!
 }
 
-"""리뷰 정보 입력"""
 input CreateReviewInput {
+  """장소 ID"""
+  placeId: String!
+
   """리뷰 제목"""
   title: String!
 
   """리뷰 내용"""
-  content: String!
+  content: String
 
   """첨부 이미지"""
   imageUrl: String
 
   """평점"""
-  rating: Int = 0
+  rating: Int!
 
   """인스타그램 업로드 URL"""
   instagramPostUrl: String
-
-  """리뷰 장소"""
-  placeId: String!
 }
 
 """리뷰 정보 수정"""
@@ -377,7 +398,7 @@ input UpdateReviewInput {
   """인스타그램 업로드 URL"""
   instagramPostUrl: String
 
-  """리뷰 장소"""
+  """장소 ID"""
   placeId: String!
 }
 
@@ -388,4 +409,19 @@ input UpdateProfileInput {
 
   """닉네임"""
   nickName: String
+
+  """소개"""
+  description: String
+
+  """프로필 부제목"""
+  subTitle: String
+
+  """커버 사진 URL"""
+  backgroundImageUrl: String
+
+  """프로필 사진 URL"""
+  profileImageUrl: String
+
+  """인스타그램 URL"""
+  instagramUrl: String
 }

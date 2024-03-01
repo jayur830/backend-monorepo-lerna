@@ -29,6 +29,7 @@ export class OAuthService {
   ) {}
 
   async authenticateKakao(
+    service: string,
     authorization?: string,
   ): Promise<CustomTokenResponse> {
     if (!authorization) {
@@ -43,7 +44,7 @@ export class OAuthService {
       ]);
       const data = response.data;
 
-      return this.authorizeCustomProvider('cliping', AuthProvider.KAKAO, {
+      return this.authorizeCustomProvider(service, AuthProvider.KAKAO, {
         displayName: data.properties.nickname,
         email: data.kakao_account.email,
       });
@@ -60,6 +61,7 @@ export class OAuthService {
   }
 
   async authenticateNaver(
+    service: string,
     authorization?: string,
   ): Promise<CustomTokenResponse> {
     if (!authorization) {
@@ -77,11 +79,10 @@ export class OAuthService {
     try {
       const data = await this.naverService.getMe(tokenClaims.access_token);
 
-      return this.authorizeCustomProvider('cliping', AuthProvider.NAVER, {
+      return this.authorizeCustomProvider(service, AuthProvider.NAVER, {
         displayName: data.response.name,
         email: data.response.email,
       });
-      return { token: '' };
     } catch (error) {
       switch (error.code) {
         case 'ERR_BAD_REQUEST':
@@ -105,10 +106,10 @@ export class OAuthService {
       const user = await auth.getUserByEmail(properties.email);
       const customClaims = {
         ...user.customClaims?.[service],
-        provider: [
+        providers: [
           ...new Set<AuthProvider>([
             ...flattenDeep<AuthProvider>(
-              user?.customClaims?.[service]?.provider || [],
+              user?.customClaims?.[service]?.providers || [],
             ),
             customProvider,
           ]),
@@ -123,11 +124,7 @@ export class OAuthService {
     } catch {
       const uid = this.alphaNumeric(28);
       const customClaims = {
-        id: uid,
-        name: properties.displayName,
-        email: properties.email,
-        provider: [customProvider],
-        created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        providers: [customProvider],
       };
 
       await auth.createUser({ uid, ...properties });

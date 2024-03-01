@@ -10,12 +10,14 @@ import { ReviewLike } from '@/entities/review-like.entity';
 import { GqlErrorCode } from '@/enums/error.enum';
 
 import { ReviewProjection } from './types/review-projection.interface';
-import { CreateReviewInput } from './vo/create-review-input.vo';
-import { Review as ReviewVO } from './vo/review.vo';
+import {
+  CreateReviewInput,
+  CreateReviewPayload,
+  Review as ReviewVO,
+  UpdateReviewInput,
+  UpdateReviewPayload,
+} from './vo/review.vo';
 import { ReviewFilter } from './vo/review-filter.vo';
-import { ReviewPagination } from './vo/review-pagination.vo';
-import { ReviewPayload } from './vo/review-payload.vo';
-import { UpdateReviewInput } from './vo/update-review-input.vo';
 
 @Injectable()
 export class ReviewService {
@@ -33,42 +35,57 @@ export class ReviewService {
     limit: number,
     offset: number,
     filter: ReviewFilter,
-  ): Promise<ReviewPagination> {
+  ): Promise<ReviewVO[]> {
     if (filter.placeId && filter.keyword) {
       const where = `r.place_id = ${filter.placeId}\nAND (\n\tr.title LIKE "%${filter.keyword}%"\n\tOR r.content LIKE "%${filter.keyword}%"\n)`;
       const results = await this.dataSource.query<ReviewProjection[]>(
         this.getReviewListQuery(limit, offset, where),
       );
-      const [{ total }] = await this.dataSource.query<[{ total: number }]>(
-        this.getReviewTotalCountQuery(where),
-      );
-      return this.getReviewPagination(results, total, limit, offset);
+      return this.getReviewPagination(results);
     } else if (filter.placeId) {
       const where = `r.place_id = ${filter.placeId}`;
       const results = await this.dataSource.query<ReviewProjection[]>(
         this.getReviewListQuery(limit, offset, where),
       );
-      const [{ total }] = await this.dataSource.query<[{ total: number }]>(
-        this.getReviewTotalCountQuery(where),
-      );
-      return this.getReviewPagination(results, total, limit, offset);
+      return this.getReviewPagination(results);
     } else if (filter.keyword) {
       const where = `r.title LIKE "%${filter.keyword}%"\nOR r.content LIKE "%${filter.keyword}%"`;
       const results = await this.dataSource.query<ReviewProjection[]>(
         this.getReviewListQuery(limit, offset, where),
       );
-      const [{ total }] = await this.dataSource.query<[{ total: number }]>(
-        this.getReviewTotalCountQuery(where),
-      );
-      return this.getReviewPagination(results, total, limit, offset);
+      return this.getReviewPagination(results);
     } else {
       const results = await this.dataSource.query<ReviewProjection[]>(
         this.getReviewListQuery(limit, offset, ''),
       );
+      return this.getReviewPagination(results);
+    }
+  }
+
+  async getReviewListTotal(filter: ReviewFilter) {
+    if (filter.placeId && filter.keyword) {
+      const where = `r.place_id = ${filter.placeId}\nAND (\n\tr.title LIKE "%${filter.keyword}%"\n\tOR r.content LIKE "%${filter.keyword}%"\n)`;
+      const [{ total }] = await this.dataSource.query<[{ total: number }]>(
+        this.getReviewTotalCountQuery(where),
+      );
+      return total;
+    } else if (filter.placeId) {
+      const where = `r.place_id = ${filter.placeId}`;
+      const [{ total }] = await this.dataSource.query<[{ total: number }]>(
+        this.getReviewTotalCountQuery(where),
+      );
+      return total;
+    } else if (filter.keyword) {
+      const where = `r.title LIKE "%${filter.keyword}%"\nOR r.content LIKE "%${filter.keyword}%"`;
+      const [{ total }] = await this.dataSource.query<[{ total: number }]>(
+        this.getReviewTotalCountQuery(where),
+      );
+      return total;
+    } else {
       const [{ total }] = await this.dataSource.query<[{ total: number }]>(
         this.getReviewTotalCountQuery(''),
       );
-      return this.getReviewPagination(results, total, limit, offset);
+      return total;
     }
   }
 
@@ -104,7 +121,7 @@ export class ReviewService {
   async createReview(
     user: FirebaseUser,
     input: CreateReviewInput,
-  ): Promise<ReviewPayload> {
+  ): Promise<CreateReviewPayload> {
     const [result] = await this.reviewRepository.save([
       {
         ...input,
@@ -120,7 +137,7 @@ export class ReviewService {
   async updateReview(
     user: FirebaseUser,
     input: UpdateReviewInput,
-  ): Promise<ReviewPayload> {
+  ): Promise<UpdateReviewPayload> {
     const isExistsReview = await this.reviewRepository.exist({
       where: { id: input.id },
     });
@@ -165,18 +182,25 @@ export class ReviewService {
       await this.reviewLikeRepository.delete(criteria);
     }
 
-    return await this.reviewLikeRepository.count({ where: { reviewId } });
+    return await this.reviewLikeRepository.countBy({ reviewId });
   }
 
   private getReviewListQuery(limit: number, offset: number, where: string) {
     return `
 SELECT
-  r.*,
+  r.id,
+  r.title,
+  r.content,
+  r.image_url,
+  r.rating,
+  r.instagram_post_url,
+  r.created_at,
+  r.updated_at,
+  r.user_id,
+  r.place_id,
   p.profile_image_url,
   COUNT(l.review_id) AS review_like_count
 FROM review r
-JOIN user u
-ON r.user_id = u.id
 LEFT JOIN profile p
 ON r.user_id = p.user_id
 LEFT JOIN review_like l
@@ -194,7 +218,8 @@ GROUP BY
   r.user_id,
   r.place_id,
   p.profile_image_url
-LIMIT ${limit}${offset ? `\nOFFSET ${offset}` : ''};`;
+LIMIT ${limit}
+OFFSET ${offset};`;
   }
 
   private getReviewTotalCountQuery(where: string) {
@@ -203,32 +228,22 @@ LIMIT ${limit}${offset ? `\nOFFSET ${offset}` : ''};`;
     };`;
   }
 
-  private getReviewPagination(
-    reviewList: ReviewProjection[],
-    total: number,
-    limit: number,
-    offset: number,
-  ) {
-    return {
-      limit,
-      offset,
-      total,
-      list: reviewList.map((item) => ({
-        id: item.id,
-        placeId: item.place_id,
-        user: {
-          id: item.user_id,
-          profileImageUrl: item.profile_image_url,
-        },
-        title: item.title,
-        content: item.content,
-        imageUrl: item.image_Url,
-        like: item.review_like_count,
-        rating: item.rating,
-        instagramPostUrl: item.instagram_post_url,
-        createdAt: dayjs(item.created_at).format('YYYY-MM-DD HH:mm:ss'),
-        updatedAt: dayjs(item.updated_at).format('YYYY-MM-DD HH:mm:ss'),
-      })),
-    };
+  private getReviewPagination(reviewList: ReviewProjection[]) {
+    return reviewList.map((item) => ({
+      id: item.id,
+      placeId: item.place_id,
+      user: {
+        id: item.user_id,
+        profileImageUrl: item.profile_image_url,
+      },
+      title: item.title,
+      content: item.content,
+      imageUrl: item.image_Url,
+      like: item.review_like_count,
+      rating: item.rating,
+      instagramPostUrl: item.instagram_post_url,
+      createdAt: dayjs(item.created_at).format('YYYY-MM-DD HH:mm:ss'),
+      updatedAt: dayjs(item.updated_at).format('YYYY-MM-DD HH:mm:ss'),
+    }));
   }
 }

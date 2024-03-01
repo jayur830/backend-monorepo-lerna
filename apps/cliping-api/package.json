@@ -32,6 +32,7 @@
     "@toy/decorator": "*",
     "@toy/firebase": "*",
     "@toy/guard": "*",
+    "@toy/scalar": "*",
     "axios": "^1.6.0",
     "dayjs": "^1.11.10",
     "firebase-admin": "^11.11.1",
@@ -43,6 +44,7 @@
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -51,8 +53,8 @@
     "@types/lodash": "^4.14.201",
     "@types/node": "^20.3.1",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
@@ -73,6 +75,9 @@
       "json",
       "ts"
     ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1"
+    },
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
@@ -85,9 +90,9 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "!(*test).{ts,tsx}": [
-      "eslint --fix . --ext .tsx,.ts",
-      "prettier --write \"**/*.+(js|jsx|ts|tsx)\""
+    "**/*.ts": [
+      "eslint --fix . --ext .ts",
+      "prettier --write \"**/*.+(js|ts)\""
     ]
   }
 }

@@ -1,0 +1,25 @@
+# Ignore artifacts:
+coverage
+
+# production
+build
+
+# Ignore all HTML files:
+*.html
+*.md
+public
+
+# configs
+tsconfig*.json
+.eslintrc
+.vscode
+package*.json
+
+# Continuous Deploy
+*.yml
+
+dist
+node_modules
+.yarn
+.pnp.cjs
+.pnp.loager.mjs

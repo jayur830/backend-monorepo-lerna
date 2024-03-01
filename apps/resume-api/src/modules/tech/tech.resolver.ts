@@ -1,4 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
+import { IDScalar } from '@toy/scalar';
 
 import { TechLogo } from '@/enums/logo.enum';
 
@@ -15,7 +16,7 @@ export class TechResolver {
   }
 
   @Query(() => [Skill], { description: '기술 스택' })
-  skillList(@Args({ name: 'userId', type: () => String, description: '유저 ID' }) userId: string): Promise<Skill[]> {
+  skillList(@Args({ name: 'userId', type: () => IDScalar, description: '유저 ID' }) userId: string): Promise<Skill[]> {
     return this.techService.getSkillList(userId);
   }
 }
