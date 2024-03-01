@@ -4,6 +4,7 @@ import { AppModule } from './modules/app/app.module';
 
 async function bootstrap() {
   console.log(
+    'mysql connection:',
     `\n${JSON.stringify(
       {
         type: 'mysql',
