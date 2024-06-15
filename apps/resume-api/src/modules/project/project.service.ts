@@ -85,7 +85,7 @@ export class ProjectService {
         {
           title: input.title,
           startDate: input.startDate ? input.startDate.format('YYYY-MM-DD') : undefined,
-          endDate: input.endDate ? input.endDate.format('YYYY-MM-DD') : undefined,
+          endDate: input.endDate ? input.endDate.format('YYYY-MM-DD') : null,
           description: input.description,
         },
       );

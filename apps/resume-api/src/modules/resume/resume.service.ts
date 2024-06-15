@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
 import { omit } from 'lodash';
 import { FirebaseUser } from '@toy/firebase/types';
+import { AuthGuardType } from '@toy/guard/enums';
 import { DataSource, Repository } from 'typeorm';
 
 import { ResumeInfo } from '@/entities/resume-info.entity';
@@ -21,6 +22,10 @@ export class ResumeService {
   ) {}
 
   async getResumeInfo(userId: string): Promise<ResumeInfoVO> {
+    const count = await this.resumeInfoRepository.countBy({ userId });
+    if (count === 0) {
+      throw new UnauthorizedException('이력서 정보가 없습니다.', AuthGuardType.Unauthorization);
+    }
     const [result] = await this.resumeInfoRepository.find({ select: ['title', 'email', 'github', 'blog'], where: { userId } });
     return result;
   }
@@ -91,7 +96,7 @@ ORDER BY
         title: item.projectTitle,
         startDate: dayjs(item.projectStartDate),
         endDate: item.projectEndDate ? dayjs(item.projectEndDate) : null,
-        techList: item.projectTechList.split(','),
+        techList: item.projectTechList && item.projectTechList.length > 0 ? item.projectTechList.split(',') : [],
         description: item.projectDescription,
       };
 
@@ -137,6 +142,7 @@ ORDER BY
         {
           companyId: item.companyId,
           companyName: item.companyName,
+          website: item.companyWebsiteUrl,
           logo: {
             src: item.companyLogoSrc,
             alt: item.companyLogoAlt,

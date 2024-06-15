@@ -1,13 +1,14 @@
-import { Logger, UseGuards } from '@nestjs/common';
+import { Logger, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Args, Info, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { GqlUserContext } from '@toy/decorator';
 import type { FirebaseUser } from '@toy/firebase/types';
 import { GqlAuthGuard } from '@toy/guard';
-import { GraphQLResolveInfo } from 'graphql';
+import { AuthGuardType } from '@toy/guard/enums';
+import { GraphQLError, GraphQLResolveInfo } from 'graphql';
 
 import { ResumeService } from './resume.service';
 import { Company } from './vo/company.vo';
-import { CreateResumeInput, CreateResumePayload, DeleteResumePayload, Resume, ResumeInfo, UpdateResumeInput, UpdateResumePayload } from './vo/resume.vo';
+import { CreateResumeInput, CreateResumePayload, Resume, ResumeInfo, UpdateResumeInput, UpdateResumePayload } from './vo/resume.vo';
 
 @Resolver(() => Resume)
 export class ResumeResolver {

@@ -76,13 +76,15 @@ export class CompanyService {
         {
           name: input.companyName,
           startDate: input.startDate ? dayjs(input.startDate).format('YYYY-MM-DD') : undefined,
-          endDate: input.endDate ? dayjs(input.endDate).format('YYYY-MM-DD') : undefined,
+          endDate: input.endDate ? dayjs(input.endDate).format('YYYY-MM-DD') : null,
           website: input.website,
           description: input.description,
         },
       );
       const companyInfoResult = await entityManager.findOneBy(ResumeCompany, { id: +input.companyId, resumeInfoId: resumeInfo.id });
-      await entityManager.update(CompanyLogo, { id: companyInfoResult.logoId }, input.logo);
+      if (input.logo) {
+        await entityManager.update(CompanyLogo, { id: companyInfoResult.logoId }, input.logo);
+      }
       const companyLogoResult = await entityManager.findOneBy(CompanyLogo, { id: companyInfoResult.logoId });
 
       await queryRunner.commitTransaction();
