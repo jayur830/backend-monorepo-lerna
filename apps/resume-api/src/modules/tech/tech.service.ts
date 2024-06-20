@@ -18,7 +18,7 @@ export class TechService {
   ) {}
 
   async getTechList(keyword: string | null): Promise<TechLogo[]> {
-    const result = await this.techRepository.find({ select: ['name'], where: keyword ? { name: Like(`%${keyword}%`) } : undefined });
+    const result = await this.techRepository.find({ select: ['name'], where: keyword ? { keywords: Like(`%${keyword.toLocaleLowerCase()}%`) } : undefined });
     return result.map((item) => item.name as TechLogo);
   }
 

@@ -12,4 +12,7 @@ export class Tech {
 
   @OneToMany(() => ResumeProjectTech, (resumeProjectTech) => resumeProjectTech.tech)
   resumeProjectTeches: ResumeProjectTech[];
+
+  @Column('varchar', { name: 'keywords', length: 128 })
+  keywords: string;
 }
