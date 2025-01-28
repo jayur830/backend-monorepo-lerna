@@ -53,3 +53,11 @@ CREATE TABLE `resume_project_tech` (
   FOREIGN KEY (`tech_id`) REFERENCES `tech`(`id`),
   FOREIGN KEY (`resume_project_id`) REFERENCES `resume_project`(`id`)
 );
+
+CREATE TABLE `tech_score` (
+  `user_id` VARCHAR(28),
+  `tech_id` INT,
+  `score` INT,
+  PRIMARY KEY (`user_id`, `tech_id`),
+  FOREIGN KEY (`tech_id`) REFERENCES `tech`(`id`)
+);

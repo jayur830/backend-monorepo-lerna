@@ -24,19 +24,15 @@ export class TechService {
 
   async getSkillList(userId: string): Promise<Skill[]> {
     const query = `
-SELECT DISTINCT
+SELECT
   t.name,
-  t.\`type\`
-FROM resume_project_tech pt
+  t.type,
+  ts.score,
+  t.logo_url AS logoUrl
+FROM tech_score ts
 JOIN tech t
-ON pt.tech_id = t.id
-JOIN resume_project p
-ON pt.resume_project_id = p.id
-JOIN resume_company c
-ON p.resume_company_id = c.id
-JOIN resume_info i
-ON c.resume_info_id = i.id
-WHERE i.user_id = ?
+ON t.id = ts.tech_id
+WHERE ts.user_id = ?
     `;
     const data = await this.dataSource.query<TechProjection[]>(query, [userId]);
 
@@ -48,7 +44,14 @@ WHERE i.user_id = ?
           if (techTypeIndex === i) {
             return {
               ...tech,
-              list: [...tech.list, item.name].sort(),
+              list: [
+                ...tech.list,
+                {
+                  value: item.name,
+                  score: item.score,
+                  logoUrl: item.logoUrl,
+                },
+              ].sort(),
             };
           }
 
@@ -60,7 +63,13 @@ WHERE i.user_id = ?
         ...result,
         {
           type: item.type,
-          list: [item.name],
+          list: [
+            {
+              value: item.name,
+              score: item.score,
+              logoUrl: item.logoUrl,
+            },
+          ],
         },
       ].sort((a, b) => (a.type < b.type ? -1 : 1));
     }, []);

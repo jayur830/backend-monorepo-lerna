@@ -421,6 +421,17 @@ type UpdateResumePayload {
   blog: String
 }
 
+type Tech {
+  """기술 스택 이름"""
+  value: TechLogo!
+
+  """기술 숙련도"""
+  score: Int!
+
+  """로고 이미지 URL"""
+  logoUrl: String!
+}
+
 type Skill {
   """
   카테고리 (lang: 프로그래밍 언어, fe: 프론트엔드, be: 백엔드, tool: 툴, db: 데이터베이스, infra: 인프라, cloud: 클라우드 서비스, cowork: 협업 툴)
@@ -428,7 +439,7 @@ type Skill {
   type: String!
 
   """기술 스택 목록"""
-  list: [TechLogo!]!
+  list: [Tech!]!
 }
 
 """YYYY 형식의 문자열"""
